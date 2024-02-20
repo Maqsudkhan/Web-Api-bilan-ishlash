@@ -7,8 +7,9 @@ namespace StudyCenterProject.MyPattern
     {
         public string CreateStudent(StudentDTO studentDTO);
         public IEnumerable<Student> GetAllStudents();
-        public Student GetStudentById(int id);
+        public IEnumerable<Student> GetStudentById(int id);
         public string DeleteStudent(int  id);
-        public Student UpdateStudent(int id,  StudentDTO studentDTO);
+        public StudentDTO UpdatePutStudent(int id,  StudentDTO studentDTO);
+        public int UpdatePatchStudent(int id, string Name);
     }
 }

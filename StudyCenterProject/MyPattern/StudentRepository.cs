@@ -63,26 +63,43 @@ namespace StudyCenterProject.MyPattern
             }
         }
 
-        public Student GetStudentById(int id)
+        public IEnumerable<Student> GetStudentById(int id)
         {
-            using(var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
-            {
-                var query = connection.Query<Student>("select * from students where sutdent_id = @id", new { id = id });
-                return (Student)query;
-            }
-            
+            string query = "select * from students where student_id = @id";
 
-        }
-
-        public Student UpdateStudent(int id, StudentDTO studentDTO)
-        {
             using (var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var query = connection.Query<Student>("update students set @full_name, @age, @course_id, @phone_number, @parents_phone_number, @shot_number where student_id = @id", 
-                    new {full_name = studentDTO,age = studentDTO, couse_id = studentDTO, phone_number = studentDTO, parents_phone_number = studentDTO, shot_number = studentDTO,id = id });
-                return (Student)query;
+                //connection.Execute(query, new Student { id = id });
+                var x = connection.Query<Student>(query, new { id = id });
+                return x;
+            }
+
+
+        }
+
+        public StudentDTO UpdatePutStudent(int id, StudentDTO studentDTO)
+        {
+        string query = "update students set full_name = @full_name, age = @age, course_id = @course_id, " +
+        "phone_number = @phone_number, parents_phone_number = @parents_phone_number, " +
+        $"shot_number = @shot_number where student_id = {id}";
+        using (var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                connection.Execute(query, new StudentDTO{full_name = studentDTO.full_name,age = studentDTO.age,
+                    course_id = studentDTO.course_id, phone_number = studentDTO.phone_number,
+                    parents_phone_number = studentDTO.parents_phone_number, shot_number = studentDTO.shot_number});
+
+                return studentDTO;
             }
         }
 
+        public int UpdatePatchStudent(int id, string name)
+        {
+            string query = "update students set full_name = @name where student_id = @id";
+            using (var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            {
+                var x = connection.Execute(query, new {Name = name, Id = id });
+                return x;
+            }
+        }
     }
 }

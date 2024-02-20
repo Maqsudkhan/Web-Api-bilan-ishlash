@@ -76,8 +76,22 @@ namespace StudyCenterProject.Controllers
         {
             try
             {
-                var respose = _studentRepository.UpdateStudent(id, studentDTO);
+                var respose = _studentRepository.UpdatePutStudent(id, studentDTO);
                 return Ok(respose);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch]
+        public IActionResult UpdatePatchStudents(int id, string name)
+        {
+            try
+            {
+                var response = _studentRepository.UpdatePatchStudent(id, name);
+                return Ok(response);
             }
             catch (Exception ex)
             {
