@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudyCenterProject.Entities;
-using StudyCenterProject.MyPattern;
+using StudyCenterProject.MyPattern.IRepositories;
 
 namespace StudyCenterProject.Controllers
 {

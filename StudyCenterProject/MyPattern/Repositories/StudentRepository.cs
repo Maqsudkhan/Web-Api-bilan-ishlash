@@ -2,13 +2,14 @@
 using Npgsql;
 using StudyCenterProject.Entities;
 using StudyCenterProject.Models;
+using StudyCenterProject.MyPattern.IRepositories;
 
-namespace StudyCenterProject.MyPattern
+namespace StudyCenterProject.MyPattern.Repositories
 {
     public class StudentRepository : IStudentRepository
 
     {
-        public IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
         public StudentRepository(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -48,7 +49,7 @@ namespace StudyCenterProject.MyPattern
             {
                 string query = "select * from students";
                 var x = connection.Query<Student>(query);
-              
+
                 return x;
             }
 
@@ -58,7 +59,7 @@ namespace StudyCenterProject.MyPattern
         {
             using (var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var query = connection.Execute("delete from students where student_id=@id", new { id = id });
+                var query = connection.Execute("delete from students where student_id=@id", new { id });
                 return "O'chirildi";
             }
         }
@@ -70,7 +71,7 @@ namespace StudyCenterProject.MyPattern
             using (var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
                 //connection.Execute(query, new Student { id = id });
-                var x = connection.Query<Student>(query, new { id = id });
+                var x = connection.Query<Student>(query, new { id });
                 return x;
             }
 
@@ -79,14 +80,20 @@ namespace StudyCenterProject.MyPattern
 
         public StudentDTO UpdatePutStudent(int id, StudentDTO studentDTO)
         {
-        string query = "update students set full_name = @full_name, age = @age, course_id = @course_id, " +
-        "phone_number = @phone_number, parents_phone_number = @parents_phone_number, " +
-        $"shot_number = @shot_number where student_id = {id}";
-        using (var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
+            string query = "update students set full_name = @full_name, age = @age, course_id = @course_id, " +
+            "phone_number = @phone_number, parents_phone_number = @parents_phone_number, " +
+            $"shot_number = @shot_number where student_id = {id}";
+            using (var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                connection.Execute(query, new StudentDTO{full_name = studentDTO.full_name,age = studentDTO.age,
-                    course_id = studentDTO.course_id, phone_number = studentDTO.phone_number,
-                    parents_phone_number = studentDTO.parents_phone_number, shot_number = studentDTO.shot_number});
+                connection.Execute(query, new StudentDTO
+                {
+                    full_name = studentDTO.full_name,
+                    age = studentDTO.age,
+                    course_id = studentDTO.course_id,
+                    phone_number = studentDTO.phone_number,
+                    parents_phone_number = studentDTO.parents_phone_number,
+                    shot_number = studentDTO.shot_number
+                });
 
                 return studentDTO;
             }
@@ -97,7 +104,7 @@ namespace StudyCenterProject.MyPattern
             string query = "update students set full_name = @name where student_id = @id";
             using (var connection = new NpgsqlConnection(_configuration.GetConnectionString("DefaultConnection")))
             {
-                var x = connection.Execute(query, new {Name = name, Id = id });
+                var x = connection.Execute(query, new { Name = name, Id = id });
                 return x;
             }
         }

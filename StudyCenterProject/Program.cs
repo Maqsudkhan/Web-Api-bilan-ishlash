@@ -1,5 +1,7 @@
-
-using StudyCenterProject.MyPattern;
+using StudyCenterProject.MyPattern.IRepositories;
+using StudyCenterProject.MyPattern.Repositories;
+using StudyCenterProject.MyServices.IServices;
+using StudyCenterProject.MyServices.Services;
 
 namespace StudyCenterProject
 {
@@ -15,7 +17,8 @@ namespace StudyCenterProject
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+
+            builder.Services.AddScoped<IStudentServices, StudentServices>();
 
             var app = builder.Build();
 
